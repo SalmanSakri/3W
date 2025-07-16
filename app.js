@@ -11,7 +11,12 @@ const PORT = process.env.PORT || 5000;
 const DB = process.env.MONGODB_URI
 
 // Middleware
-app.use(cors());
+app.use(cors({
+ origin: ['http://localhost:5173/', 'https://3w-frontend-code.netlify.app/'], // frontend domain
+
+}));
+
+app.use(express.json());
 app.use(express.json());
 
 // MongoDB connection
