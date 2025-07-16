@@ -1,34 +1,50 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
+
 const app = express();
-const UserRoutes = require("./routes/userRoutes")
+dotenv.config();
 
-// .env file load
-dotenv.config()
+// Import routes
+const UserRoutes = require("./routes/userRoutes");
+
+// Environment variables
 const PORT = process.env.PORT || 5000;
-const DB = process.env.MONGODB_URI
+const DB = process.env.MONGODB_URI;
 
-// Middleware
+// CORS middleware
 app.use(cors({
- origin: ['http://localhost:5173/', 'https://3w-frontend-code.netlify.app/'], // frontend domain
+  origin: ['http://localhost:5173',process.env.FRONTEND_URL],
   credentials: true
 }));
 
+// Middleware to parse JSON
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(DB)
-  .then(() => { console.log(`Data base connected`) })
-  .catch((error) => { `Data-base is not connected: error ${error}  ` })
+mongoose.connect(DB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log("Database connected");
+})
+.catch((error) => {
+  console.error("Database connection failed:", error.message);
+});
 
 // Routes
 app.use("/api", UserRoutes);
 
+// Root route
+app.get("/", (req, res) => {
+  res.json({ message: "Backend is running ✅" });
+});
+
 // Start server
-app.listen(PORT, async () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
 module.exports = app;
