@@ -7,7 +7,7 @@ const UserRoutes = require("./routes/userRoutes")
 
 // .env file load
 dotenv.config()
-const PORT = 5000;
+const PORT = process.env.PORT || 786;
 const DB = process.env.MONGODB_URI
 
 // Middleware
