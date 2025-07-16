@@ -43,12 +43,12 @@ exports.createUser = async (req, res) => {
         const { name } = req.body;
 
         if (!name || name.trim() === '') {
-            return res.status(400).json({ message: error, error: 'User name is required' });
+            return res.status(400).json({ error: 'User name is required' });
         }
 
-        const existingUser = await User.findOne({ message: error, name: name.trim() });
+        const existingUser = await User.findOne({ name: name.trim() });
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists', message: error, });
+            return res.status(400).json({ error: 'User already exists' });
         }
 
         const newUser = new User({ name: name.trim() });
